@@ -1,7 +1,7 @@
 galaxy_info:
   role_name: dotfiles
   author: Logan Sevcik
-  description: your role description
+  description: Dotfiles using bare git repo
   license: license (MIT)
   min_ansible_version: 2.2
   platforms:
