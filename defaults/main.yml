@@ -1,0 +1,7 @@
+---
+dotfiles_repo: "https://github.com/lsevcik/dotfiles"
+dotfiles_repo_version: master
+dotfiles_repo_accept_hostkey: true
+dotfiles_repo_local_destination: "$HOME/.dotfiles"
+dotfiles_home: "$HOME"
+dotfiles_status_untracked_files: false
