@@ -1,4 +1,7 @@
 ---
+- setup:
+    gather_subset: min
+
 - name: Clone bare repository
   git:
     bare: yes
@@ -14,39 +17,14 @@
     --git-dir="{{ dotfiles_repo_local_destination }}"
     --work-tree="{{ dotfiles_home }}"
     stash push
-    --message "Ansible lsevcik.dotfiles $(date -I)"
+    --message "Ansible lsevcik.dotfiles {{ ansible_date_time['date'] }}"
   register: stash_result
   changed_when:
     - "'Saved' in stash_result.stdout"
 
-- name: Checkout master
-  shell: >-
-    git
-    --git-dir="{{ dotfiles_repo_local_destination }}"
-    --work-tree="{{ dotfiles_home }}"
-    checkout -f
-  changed_when:
-    - false
-
 - name: Set repository configuration
-  shell: >-
-    BEFORE=$(git
-    --git-dir="{{ dotfiles_repo_local_destination }}"
-    --work-tree="{{ dotfiles_home }}"
-    config --local status.showUntrackedFiles);
-
-    git
-    --git-dir="{{ dotfiles_repo_local_destination }}"
-    --work-tree="{{ dotfiles_home }}"
-    config --local status.showUntrackedFiles no;
-
-    AFTER="$(git
-    --git-dir="{{ dotfiles_repo_local_destination }}"
-    --work-tree="{{ dotfiles_home }}"
-    config --local status.showUntrackedFiles)";
-
-    if [ "$BEFORE" != "$AFTER" ]; then echo changed; fi;
+  git_config:
+    name: status.showUntrackedFiles
+    repo: "{{ dotfiles_repo_local_destination }}"
+    scope: local
   when: not dotfiles_status_untracked_files
-  register: config_result
-  changed_when:
-    - "'changed' in config_result.stdout"
